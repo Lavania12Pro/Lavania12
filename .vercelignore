@@ -1,0 +1,4 @@
+# Don't upload local server or sqlite DB to Vercel
+server.js
+db/
+*.db

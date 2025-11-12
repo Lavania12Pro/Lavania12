@@ -1,0 +1,37 @@
+{
+  "arsiparis": [
+    {
+      "id": 1,
+      "name": "Asep Nur",
+      "tahun": 2025,
+      "unit": "PD Pendidikan",
+      "kecamatan": "Kecamatan Selatan",
+      "nilai_pengawasan": {"2023": 75, "2024": 80, "2025": 85, "2026": 88},
+      "nilai_skpd": {"2023": 78, "2024": 82, "2025": 86, "2026": 87},
+      "catatan": "Perbaikan sistem pengarsipan diperlukan.",
+      "rekomendasi": "Pelatihan digitalisasi arsip."
+    },
+    {
+      "id": 2,
+      "name": "Dewi Sari",
+      "tahun": 2024,
+      "unit": "PD Kesehatan",
+      "kecamatan": "Kecamatan Utara",
+      "nilai_pengawasan": {"2023": 70, "2024": 74, "2025": 79, "2026": 81},
+      "nilai_skpd": {"2023": 72, "2024": 75, "2025": 80, "2026": 83},
+      "catatan": "Dokumen belum lengkap di beberapa unit.",
+      "rekomendasi": "Audit arsip per unit."
+    },
+    {
+      "id": 3,
+      "name": "Budi Santoso",
+      "tahun": 2023,
+      "unit": "PD Perhubungan",
+      "kecamatan": "Kecamatan Tengah",
+      "nilai_pengawasan": {"2023": 68, "2024": 73, "2025": 77, "2026": 80},
+      "nilai_skpd": {"2023": 70, "2024": 74, "2025": 78, "2026": 80},
+      "catatan": "SOP pengelolaan arsip perlu penyegaran.",
+      "rekomendasi": "Sosialisasi SOP."
+    }
+  ]
+}

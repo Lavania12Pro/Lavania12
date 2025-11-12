@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: dap_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dapuser
+      POSTGRES_PASSWORD: dapsecret
+      POSTGRES_DB: dapdb
+    volumes:
+      - dap_pgdata:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+
+volumes:
+  dap_pgdata:

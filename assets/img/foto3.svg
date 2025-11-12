@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <rect width="100%" height="100%" fill="#f7fff4"/>
+  <rect x="36" y="36" width="1128" height="728" rx="10" fill="#ffffff" stroke="#cfead6" stroke-width="6"/>
+  <g transform="translate(80,80)">
+    <rect x="0" y="0" width="1040" height="360" fill="#e9fff0" stroke="#bfe6c8"/>
+    <text x="20" y="420" font-family="Arial, Helvetica, sans-serif" font-size="36" fill="#165c2b">Foto Kegiatan 3</text>
+    <text x="20" y="464" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#6b7280">(Placeholder — ganti dengan foto asli)</text>
+    <text x="20" y="504" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#6b7280">Foto tim Arsip & Perpustakaan</text>
+  </g>
+</svg>

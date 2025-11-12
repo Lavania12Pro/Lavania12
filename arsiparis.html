@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARSIPARIS — Dashboard Arsiparis DAP</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="nav-top">
+        <div class="brand">ARSIPARIS — Dashboard Arsiparis DAP</div>
+        <nav class="menu">
+          <a href="index.html">HOME</a>
+          <a href="pkpkt.html">PKPKT</a>
+          <a href="aski.html">ASKI</a>
+          <a href="monev.html">MONEV</a>
+          <a href="arsiparis.html">ARSIPARIS</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <main class="container">
+    <h2>Daftar Arsiparis</h2>
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <div style="flex:1">
+        <h3>Tambah Arsiparis</h3>
+        <div class="eviden-panel">
+          <label>Nama</label>
+          <input type="text" id="a_name" placeholder="Nama lengkap">
+          <label>NIP</label>
+          <input type="text" id="a_nip" placeholder="NIP">
+          <label>Golongan</label>
+          <input type="text" id="a_gol" placeholder="Golongan">
+          <label>Pangkat</label>
+          <input type="text" id="a_pangkat" placeholder="Pangkat">
+          <label>Perangkat Daerah (Unit)</label>
+          <input type="text" id="a_unit" placeholder="Unit / PD">
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <button id="a_save" class="btn-primary">Simpan Arsiparis</button>
+            <button id="a_cancel" class="btn-secondary" style="display:none">Batal</button>
+          </div>
+          <div id="a_msg" style="margin-top:6px;color:#c0392b"></div>
+        </div>
+      </div>
+      <div style="flex:1">
+        <h3>Daftar Arsiparis</h3>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+          <button id="exportExcel" class="btn-primary">Export ke Excel</button>
+          <button id="exportCSV" class="btn-secondary">Export ke CSV</button>
+        </div>
+        <div id="arsiparisList"></div>
+      </div>
+    </div>
+  </main>
+  <script>
+    // Load initial sample data into list area
+    function loadInitialList(){
+      fetch('data/arsiparis.json').then(r=>r.json()).then(d=>{
+        const base = d.arsiparis.map(a=>({ id: a.id, name: a.name, unit: a.unit, kecamatan: a.kecamatan, tahun: a.tahun }));
+        // merge sample -> localStorage if not exists
+        const existing = localStorage.getItem('dap_arsiparis')? JSON.parse(localStorage.getItem('dap_arsiparis')):[];
+        if(existing.length===0){ localStorage.setItem('dap_arsiparis', JSON.stringify(base)); }
+        renderArsiparis();
+      }).catch(()=>{ renderArsiparis(); });
+    }
+
+    let editingId = null;
+    function setEditing(id){
+      editingId = id;
+      const arr = JSON.parse(localStorage.getItem('dap_arsiparis')||'[]');
+      const item = arr.find(x=>x.id===id);
+      if(!item) return;
+      document.getElementById('a_name').value = item.name || '';
+      document.getElementById('a_nip').value = item.nip || '';
+      document.getElementById('a_gol').value = item.golongan || '';
+      document.getElementById('a_pangkat').value = item.pangkat || '';
+      document.getElementById('a_unit').value = item.unit || '';
+      document.getElementById('a_save').innerText = 'Perbarui Arsiparis';
+      document.getElementById('a_cancel').style.display = 'inline-block';
+    }
+
+    function clearEditing(){ editingId = null; document.getElementById('a_save').innerText = 'Simpan Arsiparis'; document.getElementById('a_cancel').style.display='none'; document.getElementById('a_msg').innerText=''; }
+
+    function validateEntry({name, nip, unit}){
+      if(!name) return 'Nama wajib diisi.';
+      if(!unit) return 'Perangkat Daerah / Unit wajib diisi.';
+      if(nip){ const cleaned = nip.replace(/\D/g,''); if(cleaned.length < 8 || cleaned.length>20) return 'Format NIP tampak tidak valid (8-20 digit).'; }
+      return null;
+    }
+
+    function renderArsiparis(){
+      const el = document.getElementById('arsiparisList');
+      const arr = localStorage.getItem('dap_arsiparis')? JSON.parse(localStorage.getItem('dap_arsiparis')):[];
+      if(!arr.length){ el.innerText='Tidak ada data arsiparis.'; return; }
+      let html = '<table class="table"><thead><tr><th>Nama</th><th>NIP</th><th>Gol</th><th>Pangkat</th><th>Unit</th><th>Aksi</th></tr></thead><tbody>';
+      arr.forEach(a=>{ html+=`<tr><td>${a.name}</td><td>${a.nip||''}</td><td>${a.golongan||''}</td><td>${a.pangkat||''}</td><td>${a.unit||''}</td><td><button class="ars-edit" data-id="${a.id}">Edit</button> <button class="ars-del" data-id="${a.id}">Hapus</button></td></tr>`; });
+      html += '</tbody></table>';
+      el.innerHTML = html;
+      // attach delete handlers
+      el.querySelectorAll('.ars-del').forEach(b=> b.addEventListener('click', (ev)=>{
+        const id = Number(ev.currentTarget.dataset.id);
+        if(!confirm('Hapus arsiparis ini?')) return;
+        const arr = JSON.parse(localStorage.getItem('dap_arsiparis')||'[]');
+        const kept = arr.filter(x=>x.id !== id);
+        localStorage.setItem('dap_arsiparis', JSON.stringify(kept));
+        renderArsiparis();
+      }));
+      // attach edit handlers
+      el.querySelectorAll('.ars-edit').forEach(b=> b.addEventListener('click', (ev)=>{
+        const id = Number(ev.currentTarget.dataset.id);
+        setEditing(id);
+      }));
+    }
+
+    document.getElementById('a_save').addEventListener('click', ()=>{
+      const name = document.getElementById('a_name').value.trim();
+      const nip = document.getElementById('a_nip').value.trim();
+      const gol = document.getElementById('a_gol').value.trim();
+      const pangkat = document.getElementById('a_pangkat').value.trim();
+      const unit = document.getElementById('a_unit').value.trim();
+      const msg = document.getElementById('a_msg');
+      const err = validateEntry({name, nip, unit});
+      if(err){ msg.innerText = err; return; }
+      const arr = localStorage.getItem('dap_arsiparis')? JSON.parse(localStorage.getItem('dap_arsiparis')):[];
+      if(editingId){
+        // update existing
+        const idx = arr.findIndex(x=>x.id===editingId);
+        if(idx >= 0){ arr[idx] = { id: editingId, name, nip, golongan:gol, pangkat, unit }; localStorage.setItem('dap_arsiparis', JSON.stringify(arr)); msg.innerText='Terupdate.'; clearEditing(); renderArsiparis(); }
+        else { msg.innerText='Data tidak ditemukan.'; }
+      } else {
+        const id = Date.now(); arr.push({ id, name, nip, golongan:gol, pangkat, unit }); localStorage.setItem('dap_arsiparis', JSON.stringify(arr)); msg.innerText = 'Tersimpan.'; renderArsiparis();
+      }
+      // clear form
+      document.getElementById('a_name').value=''; document.getElementById('a_nip').value=''; document.getElementById('a_gol').value=''; document.getElementById('a_pangkat').value=''; document.getElementById('a_unit').value='';
+    });
+
+    document.getElementById('a_cancel').addEventListener('click', ()=>{ clearEditing(); document.getElementById('a_name').value=''; document.getElementById('a_nip').value=''; document.getElementById('a_gol').value=''; document.getElementById('a_pangkat').value=''; document.getElementById('a_unit').value=''; });
+
+    loadInitialList();
+  </script>
+  <!-- SheetJS for Excel export -->
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <script>
+    function getArsiparisArray(){
+      const arr = localStorage.getItem('dap_arsiparis')? JSON.parse(localStorage.getItem('dap_arsiparis')):[];
+      // normalize fields for export
+      return arr.map(a=>({ID: a.id, Nama: a.name, NIP: a.nip||'', Golongan: a.golongan||'', Pangkat: a.pangkat||'', Unit: a.unit||''}));
+    }
+
+    document.getElementById('exportExcel').addEventListener('click', ()=>{
+      const data = getArsiparisArray();
+      if(!data.length){ alert('Tidak ada data untuk diekspor.'); return; }
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Arsiparis');
+      XLSX.writeFile(wb, 'arsiparis.xlsx');
+    });
+
+    document.getElementById('exportCSV').addEventListener('click', ()=>{
+      const data = getArsiparisArray();
+      if(!data.length){ alert('Tidak ada data untuk diekspor.'); return; }
+      const ws = XLSX.utils.json_to_sheet(data);
+      const csv = XLSX.utils.sheet_to_csv(ws);
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'arsiparis.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Arsiparis DAP</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="nav-top">
+        <div class="brand">Dashboard Arsiparis DAP</div>
+        <nav class="menu">
+          <a href="index.html">HOME</a>
+          <a href="pkpkt.html">PKPKT</a>
+          <a href="aski.html">ASKI</a>
+          <a href="monev.html">MONEV</a>
+          <a href="arsiparis.html">ARSIPARIS</a>
+        </nav>
+        <div class="auth">
+          <button id="loginBtn" class="btn-login">Login Admin</button>
+          <div id="adminInfo" class="admin-info" style="display:none">
+            <span id="adminName"></span>
+            <button id="logoutBtn" class="btn-logout">Logout</button>
+          </div>
+        </div>
+      </div>
+      <div class="years">
+        <button class="year">2025</button>
+        <button class="year">2025</button>
+        <button class="year">2025</button>
+        <button class="year">2026</button>
+        <button class="year">2026</button>
+        <button class="year">2026</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="slideshow">
+      <div class="overlay">Slide Show Foto Kegiatan</div>
+      <div class="carousel" id="carousel">
+        <div class="slide"><img src="assets/img/img1.svg" alt="kegiatan 1"></div>
+        <div class="slide"><img src="assets/img/img2.svg" alt="kegiatan 2"></div>
+        <div class="slide"><img src="assets/img/img3.svg" alt="kegiatan 3"></div>
+      </div>
+      <div class="carousel-controls">
+        <button id="prev">‹</button>
+        <button id="next">›</button>
+      </div>
+    </section>
+
+    <section class="search">
+      <h2>Pencarian Data Base Arsiparis</h2>
+      <div class="search-row">
+        <input type="text" id="searchInput" placeholder="Masukkan nama arsiparis...">
+        <button id="searchBtn">Cari</button>
+      </div>
+      <div id="searchResults" class="results"></div>
+    </section>
+
+    <section id="gallerySection" class="gallery">
+      <h2>Foto Kegiatan</h2>
+      <div id="galleryNotice" class="note">Unggah foto kegiatan melalui akun Admin. Foto disimpan di browser (localStorage) untuk prototype.</div>
+      <div id="galleryPanel" class="gallery-panel" style="display:none">
+        <input type="file" id="galleryFile" accept="image/*" multiple>
+        <input type="text" id="galleryCaption" placeholder="Keterangan singkat (opsional)">
+        <button id="saveGalleryBtn" class="btn-primary">Unggah Foto</button>
+        <div id="galleryPreview" class="gallery-preview"></div>
+      </div>
+      <div id="galleryGrid" class="gallery-grid"></div>
+    </section>
+
+    <!-- three-columns removed as requested -->
+  </main>
+
+  <footer class="footer">
+    <small>Dashboard Arsiparis DAP — contoh prototype</small>
+  </footer>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal" style="display:none">
+    <div class="modal-content">
+      <h3>Login Admin</h3>
+      <div class="modal-body">
+        <label>Username</label>
+        <input type="text" id="loginUser" placeholder="username">
+        <label>Password</label>
+        <input type="password" id="loginPass" placeholder="password">
+        <div class="modal-actions">
+          <button id="doLogin" class="btn-login btn-primary">Login</button>
+          <button id="cancelLogin" class="btn-login btn-secondary">Batal</button>
+        </div>
+        <div id="loginMsg" class="login-msg"></div>
+      </div>
+    </div>
+  </div>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

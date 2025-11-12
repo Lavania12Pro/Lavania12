@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PKPKT — Dashboard Arsiparis DAP</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="nav-top">
+        <div class="brand">PKPKT — Dashboard Arsiparis DAP</div>
+        <nav class="menu">
+          <a href="index.html">HOME</a>
+          <a href="pkpkt.html">PKPKT</a>
+          <a href="aski.html">ASKI</a>
+          <a href="monev.html">MONEV</a>
+          <a href="arsiparis.html">ARSIPARIS</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <main class="container">
+    <h2>PKPKT — Nilai Pengawasan Tahun ke Tahun</h2>
+    <div id="pkpktDetail"></div>
+  </main>
+  <script>
+    // simple render from data
+    fetch('data/arsiparis.json').then(r=>r.json()).then(d=>{
+      const years=['2023','2024','2025','2026'];
+      const sums = {2023:0,2024:0,2025:0,2026:0}; const counts={2023:0,2024:0,2025:0,2026:0};
+      d.arsiparis.forEach(a=>{ years.forEach(y=>{ if(a.nilai_pengawasan && a.nilai_pengawasan[y]){ sums[y]+=a.nilai_pengawasan[y]; counts[y]++; } }); });
+      let html='<table class="table"><thead><tr><th>Tahun</th><th>Rata-rata</th></tr></thead><tbody>';
+      years.forEach(y=>{ const avg = counts[y]? (sums[y]/counts[y]).toFixed(1):'-'; html+=`<tr><td>${y}</td><td>${avg}</td></tr>`; }); html+='</tbody></table>';
+      document.getElementById('pkpktDetail').innerHTML = html;
+    }).catch(()=>{ document.getElementById('pkpktDetail').innerText='Gagal memuat data.' });
+  </script>
+</body>
+</html>

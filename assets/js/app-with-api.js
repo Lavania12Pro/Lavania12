@@ -10,7 +10,8 @@
  * Data sekarang tersimpan di database, bukan localStorage!
  */
 
-const API_BASE = 'http://localhost:5000';
+// Auto-detect API_BASE — gunakan current domain di production
+const API_BASE = window.location.origin;
 
 // ============ UTILITY ============
 function isAdmin() { return !!localStorage.getItem('dap_admin'); }
